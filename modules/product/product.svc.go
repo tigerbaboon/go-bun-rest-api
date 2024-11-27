@@ -54,7 +54,6 @@ func (s *ProductService) Update(ctx context.Context, id productdto.GetProductByI
 
 	_, err = s.db.NewUpdate().Model(&m).
 		Set("name = ?name").
-		Set("name = ?name").
 		Set("price = ?price").
 		Set("description = ?description").
 		Set("is_actived = ?is_actived").

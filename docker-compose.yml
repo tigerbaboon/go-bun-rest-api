@@ -1,6 +1,7 @@
 version: '3.9'
 
 services:
+
   app:
     build:
       context: .
@@ -10,17 +11,26 @@ services:
     environment:
       - DB_HOST=host.docker.internal
       - DB_PORT=5432
-      - DB_DATABASE=postgres
+      - DB_DATABASE=hello
       - DB_USER=root
       - DB_PASSWORD=secret
     command: http
     depends_on:
-      - postgres
-  
+      postgres:
+        condition: service_healthy
+
   postgres:
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=secret
+      image: postgres:latest
+      ports:
+        - "5432:5432"
+      environment:
+        - POSTGRES_USER=root
+        - POSTGRES_PASSWORD=secret
+        - POSTGRES_DB=hello
+      healthcheck:
+        test: ["CMD", "pg_isready"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+  
+  
